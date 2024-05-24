@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import NavBar from "./components/NavBar";
 import Home from './pages/Home';
-
+import SecondPage from './pages/SecondPage';
 
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
       <NavBar />
       <Routes>
           <Route path="/" element={<Home user={user} />} />
+          <Route path="/more" element={<SecondPage user={user}/>} />
         </Routes>
         <Flex alignSelf="center" padding="5em">
       <button onClick={signOut}>Sign out</button>

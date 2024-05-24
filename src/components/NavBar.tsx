@@ -1,9 +1,12 @@
 import { useState } from 'react'
-import { MenuButton, Text, Flex, useTheme } from '@aws-amplify/ui-react'
+import { Text, Flex, useTheme } from '@aws-amplify/ui-react'
 import './NavBar.css'
 import { useNavigate } from 'react-router-dom';
 import i18n from '../i18n';
 import NavButton from './NavButton';
+
+import duck from "./../assets/duck-svgrepo-com.svg";
+
 
 import { useTranslation } from 'react-i18next'
 
@@ -28,17 +31,14 @@ const Navbar = () => {
         <nav className="navbar">
             <div className="container">
                 <div className="menu-icon" onClick={handleShowNavbar}>
-                    <MenuButton />
+                    <img src={duck} height="100px"/>
                 </div>
                 <div className={`nav-elements  ${showNavbar && 'active'}`}>
                     <ul>
                         <li>
-                            <NavButton path='/product' labelKey={t("Product Nav button")} onClick={() => { navigate('/product'); setShowNavbar(false); }} /> </li>
+                            <NavButton path='/' labelKey={t("Product Nav button")} onClick={() => { navigate('/'); setShowNavbar(false); }} /> </li>
                         <li>
-                            <NavButton path='/circularity' labelKey={t("Circularity Nav button")} onClick={() => { navigate('/circularity'); setShowNavbar(false); }} />
-                        </li>
-                        <li>
-                            <NavButton path='/contact' labelKey={t("Contact")} onClick={() => { navigate('/contact'); setShowNavbar(false); }} />
+                            <NavButton path='/more' labelKey={t("Circularity Nav button")} onClick={() => { navigate('/more'); setShowNavbar(false); }} />
                         </li>
                         <li>
                         <Flex
