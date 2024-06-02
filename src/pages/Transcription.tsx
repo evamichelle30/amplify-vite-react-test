@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 function Transcription({user} : {user: AuthUser | undefined}) {
     const getTranscription = async (fileUrl: string): Promise<{ fullText: string; }> => {
 
+      console.log("Hello from Transcription")
       const download = await downloadData({
         path: fileUrl,
         options: {
@@ -23,7 +24,10 @@ function Transcription({user} : {user: AuthUser | undefined}) {
 
       console.log(download);
 
-        const mp3 = await download.body.text()
+        const blob = await download.body.blob()
+        const buf = await blob.arrayBuffer()
+
+        const mp3 = new Uint8Array(buf);
         const transcription = await Predictions.convert({
             transcription: {
                 source: {
@@ -36,9 +40,10 @@ function Transcription({user} : {user: AuthUser | undefined}) {
         return transcription.transcription;
     }
 
-    const [transcriptionReturn, setTranscriptionInformation] = useState({});
+    const [transcriptionReturn, setTranscriptionInformation] = useState("nothing to see");
 
     useEffect(() => {
+      console.log("hello from effect")
     getTranscription("https://amplify-d9agfyakfbx39-dev-myteststoragebucket1c77e-cwvnvnhvkxbq.s3.eu-north-1.amazonaws.com/audio_files/07+Lektion+2%2C+Text+9.mp3")
     .then(transcription =>
         setTranscriptionInformation(transcription.fullText)
