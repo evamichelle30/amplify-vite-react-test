@@ -1,38 +1,35 @@
-import { useEffect, useState } from "react";
-import type { Schema } from "../../amplify/data/resource";
-import { generateClient } from "aws-amplify/data";
+import React from "react";
+import { uploadData } from "aws-amplify/storage";
 import '@aws-amplify/ui-react/styles.css'
 import { AuthUser } from "aws-amplify/auth";
 import { Flex } from "@aws-amplify/ui-react";
 
-const client = generateClient<Schema>();
+import '@aws-amplify/ui-react/styles.css';
 
 function SecondPage({user} : {user: AuthUser | undefined}) {
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
 
-  useEffect(() => {
-    client.models.Todo.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
-    });
-  }, []);
+    const [file, setFile] = React.useState();
 
-  function createTodo() {
-    client.models.Todo.create({ content: window.prompt("Todo content") });
-  }
-
-  function deleteTodo(id: string) {
-    client.models.Todo.delete({ id })
-  }
+    const handleChange = (event: any) => {
+        setFile(event.target.files[0]);
+    };
 
   return (
     <Flex margin="20em" alignSelf="center" direction="column">
       <h1>{user?.signInDetails?.loginId}'s todos</h1>
-      <button onClick={createTodo}>+ new</button>
-      <ul>
-        {todos.map((todo) => (
-          <li onClick={() => deleteTodo(todo.id)} key={todo.id}>{todo.content}</li>
-        ))}
-      </ul>
+        <div>
+            <input type="file" onChange={handleChange} />
+            <button
+                onClick={() =>
+                    uploadData({
+                        path: `audio_files/${file.name}`,
+                        data: file,
+                    })
+                }
+            >
+                Upload mp3
+            </button>
+        </div>
       <div>
         🥳 
         <br />
