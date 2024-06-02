@@ -7,7 +7,6 @@ import NavButton from './NavButton';
 
 import duck from "./../assets/duck-svgrepo-com.svg";
 
-
 import { useTranslation } from 'react-i18next'
 
 const Navbar = () => {
@@ -36,9 +35,12 @@ const Navbar = () => {
                 <div className={`nav-elements  ${showNavbar && 'active'}`}>
                     <ul>
                         <li>
-                            <NavButton path='/' labelKey={t("Product Nav button")} onClick={() => { navigate('/'); setShowNavbar(false); }} /> </li>
+                            <NavButton path='/' labelKey={t("Home Nav button")} onClick={() => { navigate('/'); setShowNavbar(false); }} /> </li>
                         <li>
-                            <NavButton path='/more' labelKey={t("Circularity Nav button")} onClick={() => { navigate('/more'); setShowNavbar(false); }} />
+                            <NavButton path='/upload' labelKey={t("Upload Nav button")} onClick={() => { navigate('/upload'); setShowNavbar(false); }} />
+                        </li>
+                         <li>
+                            <NavButton path='/transcribe' labelKey={t("Transcribe Nav button")} onClick={() => { navigate('/transcribe'); setShowNavbar(false); }} />
                         </li>
                         <li>
                         <Flex
