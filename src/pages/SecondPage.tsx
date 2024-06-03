@@ -16,14 +16,6 @@ function SecondPage({user} : {user: AuthUser | undefined}) {
         path: 'audio_files/'});
       const files = result.items.map(file => file.path);
 
-      // // Get the URL for each file
-      // const urls = await Promise.all(
-      //   fileKeys.map(async (key) => {
-      //     const url = await getUrl(key);
-      //     return url;
-      //   })
-      // );
-
       setAudioUrls(files);
     } catch (error) {
       console.error("Error fetching audio file URLs:", error);
