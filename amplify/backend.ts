@@ -15,30 +15,18 @@ const backend = defineBackend({
 backend.auth.resources.unauthenticatedUserIamRole.addToPrincipalPolicy(
   new PolicyStatement({
     actions: [
-      "translate:TranslateText",
-      "polly:SynthesizeSpeech",
       "transcribe:StartStreamTranscriptionWebSocket",
-      "comprehend:DetectSentiment",
-      "comprehend:DetectEntities",
-      "comprehend:DetectDominantLanguage",
-      "comprehend:DetectSyntax",
-      "comprehend:DetectKeyPhrases",
-      "rekognition:DetectFaces",
-      "rekognition:RecognizeCelebrities",
-      "rekognition:DetectLabels",
-      "rekognition:DetectModerationLabels",
-      "rekognition:DetectText",
-      "rekognition:DetectLabel",
-      "rekognition:SearchFacesByImage",      
-      "textract:AnalyzeDocument",
-      "textract:DetectDocumentText",
-      "textract:GetDocumentAnalysis",
-      "textract:StartDocumentAnalysis",
-      "textract:StartDocumentTextDetection",
     ],
     resources: ["*"],
   })
 );
+
+const region = Stack.of(backend.auth.resources.unauthenticatedUserIamRole).region;
+
+// Ensure the region is defined
+if (!region) {
+  throw new Error("Region is not defined. Please check your configuration.");
+}
 
 backend.addOutput({
   custom: {
