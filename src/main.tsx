@@ -6,7 +6,7 @@ import { Amplify } from "aws-amplify";
 import outputs from "../amplify_outputs.json";
 import { BrowserRouter } from 'react-router-dom';
 
-const region = "eu-north-1"
+const region = "eu-west-1"
 
 Amplify.configure(outputs);
 

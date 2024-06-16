@@ -12,7 +12,7 @@ const backend = defineBackend({
 });
 
 // The actions included below cover all supported ML capabilities
-backend.auth.resources.unauthenticatedUserIamRole.addToPrincipalPolicy(
+backend.auth.resources.authenticatedUserIamRole.addToPrincipalPolicy(
   new PolicyStatement({
     actions: [
       "transcribe:StartStreamTranscriptionWebSocket",
