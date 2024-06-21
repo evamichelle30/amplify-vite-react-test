@@ -16,6 +16,17 @@ backend.auth.resources.authenticatedUserIamRole.addToPrincipalPolicy(
   new PolicyStatement({
     actions: [
       "transcribe:StartStreamTranscriptionWebSocket",
+      "transcribe:StartTranscriptionJob"
+    ],
+    resources: ["*"],
+  })
+);
+
+backend.auth.resources.unauthenticatedUserIamRole.addToPrincipalPolicy(
+  new PolicyStatement({
+    actions: [
+      "transcribe:StartStreamTranscriptionWebSocket",
+      "transcribe:StartTranscriptionJob"
     ],
     resources: ["*"],
   })

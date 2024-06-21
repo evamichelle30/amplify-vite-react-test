@@ -16,7 +16,7 @@ Amplify.configure({
     convert: {
       transcription: {
         defaults: {
-          language: "en-US",
+          language: "pt-BR",
         },
         proxy: false,
         region: region,

@@ -1,21 +1,33 @@
-import { Predictions } from '@aws-amplify/predictions';
-
 import '@aws-amplify/ui-react/styles.css'
 import { AuthUser } from "aws-amplify/auth";
 import { Button, Flex, Heading, SelectField } from "@aws-amplify/ui-react";
 
 import { downloadData, list } from 'aws-amplify/storage';
+import { fromCognitoIdentityPool } from "@aws-sdk/credential-provider-cognito-identity";
 
 import { useState, useEffect } from 'react';
+import { LanguageCode, MediaFormat, StartTranscriptionJobCommand, StartTranscriptionJobCommandOutput, TranscribeClient } from "@aws-sdk/client-transcribe";
+import { Amplify } from 'aws-amplify';
 
 function Transcription({user} : {user: AuthUser | undefined}) {
 
-    const getTranscription = async (fileUrl: string): Promise<{ fullText: string; }> => {
+const REGION = "eu-north-1";
+const identityPoolId = Amplify.getConfig().Auth?.Cognito.identityPoolId;
+if (!identityPoolId) {
+  throw new Error('Cognito Identity Pool ID is not defined in the configuration.');
+}
+const CREDENTIALS = fromCognitoIdentityPool({
+  clientConfig: { region: REGION },
+  identityPoolId: identityPoolId,
+});
+
+const transcribeClient = new TranscribeClient({ region: REGION, credentials: CREDENTIALS });
+
+    const getTranscription = async (fileUrl: string): Promise<StartTranscriptionJobCommandOutput | undefined> => {
 
       const download = await downloadData({
         path: fileUrl,
         options: {
-          // optional progress callback
           onProgress: (event) => {
             console.log(event.transferredBytes);
           }
@@ -24,23 +36,43 @@ function Transcription({user} : {user: AuthUser | undefined}) {
 
       console.log(download);
 
-        const blob = await download.body.blob()
-        const buf = await blob.arrayBuffer()
+      const params = {
+        TranscriptionJobName: "test_transcription",
+        LanguageCode: LanguageCode.RU_RU, // For example, 'en-US'
+        MediaFormat: MediaFormat.MP3, // For example, 'wav'
+        Media: {
+          MediaFileUri: fileUrl,
+        },
+        OutputBucketName: "amplify-d9agfyakfbx39-dev-myteststoragebucket1c77e-cwvnvnhvkxbq"
+      };
 
-        const mp3 = new Uint8Array(buf);
-        const transcription = await Predictions.convert({
-            transcription: {
-                source: {
-                    bytes: mp3
-                }
-            }
-        });
+      try {
+        const transcription = await transcribeClient.send(
+          new StartTranscriptionJobCommand(params)
+        );
+        console.log("Success - put", transcription);
+        return transcription;
+      } catch (err) {
+        console.log("Error", err);
+      }
 
-        console.log(transcription);
-        return transcription.transcription;
+        // const blob = await download.body.blob()
+        // const buf = await blob.arrayBuffer()
+
+        // const mp3 = new Uint8Array(buf);
+        // const transcription = await Predictions.convert({
+        //     transcription: {
+        //         source: {
+        //             bytes: mp3
+        //         }
+        //     }
+        // });
+
+        // console.log(transcription);
+        // return transcription.transcription;
     }
 
-    const [transcriptionReturn, setTranscriptionInformation] = useState("");
+    const [transcriptionReturn, setTranscriptionInformation] = useState<string | undefined>("");
   
     const [selectedFile, setSelectedFile] = useState<string | undefined>(undefined);
 
@@ -70,7 +102,7 @@ function Transcription({user} : {user: AuthUser | undefined}) {
   const handleTranscription = async () => {
     if (selectedFile) {
       const transcription = await getTranscription(selectedFile);
-      setTranscriptionInformation(transcription.fullText);
+      setTranscriptionInformation(transcription?.TranscriptionJob?.Transcript?.RedactedTranscriptFileUri);
     }
   };
 
