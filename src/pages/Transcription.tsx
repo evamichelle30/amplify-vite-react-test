@@ -39,7 +39,7 @@ const transcribeClient = new TranscribeClient({ region: REGION, credentials: CRE
       console.log(download);
 
       const params = {
-        TranscriptionJobName: "test_transcription",
+        TranscriptionJobName: "test_transcription_"+ fileUrl,
         LanguageCode: LanguageCode.RU_RU, // For example, 'en-US'
         MediaFormat: MediaFormat.MP3, // For example, 'wav'
         Media: {
