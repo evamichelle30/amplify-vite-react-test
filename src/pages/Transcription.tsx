@@ -21,6 +21,8 @@ const CREDENTIALS = fromCognitoIdentityPool({
   identityPoolId: identityPoolId,
 });
 
+const bucket = "amplify-d9agfyakfbx39-dev-myteststoragebucket1c77e-cwvnvnhvkxbq"
+
 const transcribeClient = new TranscribeClient({ region: REGION, credentials: CREDENTIALS });
 
     const getTranscription = async (fileUrl: string): Promise<StartTranscriptionJobCommandOutput | undefined> => {
@@ -41,9 +43,9 @@ const transcribeClient = new TranscribeClient({ region: REGION, credentials: CRE
         LanguageCode: LanguageCode.RU_RU, // For example, 'en-US'
         MediaFormat: MediaFormat.MP3, // For example, 'wav'
         Media: {
-          MediaFileUri: fileUrl,
+          MediaFileUri: "s3://" + bucket + "/" + fileUrl,
         },
-        OutputBucketName: "amplify-d9agfyakfbx39-dev-myteststoragebucket1c77e-cwvnvnhvkxbq"
+        OutputBucketName: bucket
       };
 
       try {

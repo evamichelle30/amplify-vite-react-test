@@ -16,7 +16,12 @@ backend.auth.resources.authenticatedUserIamRole.addToPrincipalPolicy(
   new PolicyStatement({
     actions: [
       "transcribe:StartStreamTranscriptionWebSocket",
-      "transcribe:StartTranscriptionJob"
+      "transcribe:StartTranscriptionJob",
+      "s3:GetObject",
+      "s3:GetObjectAcl",
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+      "s3:ListBucket"
     ],
     resources: ["*"],
   })
@@ -26,7 +31,12 @@ backend.auth.resources.unauthenticatedUserIamRole.addToPrincipalPolicy(
   new PolicyStatement({
     actions: [
       "transcribe:StartStreamTranscriptionWebSocket",
-      "transcribe:StartTranscriptionJob"
+      "transcribe:StartTranscriptionJob",
+      "s3:GetObject",
+      "s3:GetObjectAcl",
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+      "s3:ListBucket"
     ],
     resources: ["*"],
   })
