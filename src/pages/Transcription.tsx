@@ -6,7 +6,7 @@ import { downloadData, list } from 'aws-amplify/storage';
 import { fromCognitoIdentityPool } from "@aws-sdk/credential-provider-cognito-identity";
 
 import { useState, useEffect } from 'react';
-import { LanguageCode, MediaFormat, StartTranscriptionJobCommand, StartTranscriptionJobCommandOutput, TranscribeClient } from "@aws-sdk/client-transcribe";
+import { MediaFormat, StartTranscriptionJobCommand, StartTranscriptionJobCommandOutput, TranscribeClient } from "@aws-sdk/client-transcribe";
 import { Amplify } from 'aws-amplify';
 
 function Transcription({user} : {user: AuthUser | undefined}) {
@@ -39,8 +39,10 @@ const transcribeClient = new TranscribeClient({ region: REGION, credentials: CRE
       console.log(download);
 
       const params = {
-        TranscriptionJobName: "test_transcription_"+ fileUrl.replace(" ", ""),
-        LanguageCode: LanguageCode.RU_RU, // For example, 'en-US'
+        // TODO: change Jobname!
+        TranscriptionJobName: "test_transcription_"+ fileUrl.split("/")[1].replace(" ", ""),
+        // LanguageCode: LanguageCode.RU_RU, // For example, 'en-US'
+        IdentifyMultipleLanguages: true,
         MediaFormat: MediaFormat.MP3, // For example, 'wav'
         Media: {
           MediaFileUri: "s3://" + bucket + "/" + fileUrl,
